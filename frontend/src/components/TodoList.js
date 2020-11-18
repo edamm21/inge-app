@@ -15,7 +15,7 @@ class TodoList extends Component {
             );
         } else {
             return (
-                <div className="container" style={{width: '50%'}}>
+                <div className="container" style={{width: '80%'}}>
                     {
                         todos.map(todo => {
                             return (<Todo todo={todo}/>);

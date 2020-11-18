@@ -15,15 +15,25 @@ class Todo extends Component {
         event.preventDefault();
         event.stopPropagation();
         this.props.deleteTodo(this.props.todo.id);
+        document.getElementById('todo' + this.props.todo.id).style.display = 'none';
+    }
+
+    createDate = (date) => {
+        let unformatted = new Date(date).toISOString().split('T')[0];
+        const splitted = unformatted.split('-');
+        const year  = splitted[0];
+        const month = splitted[1];
+        const day   = splitted[2];
+        return day + '/' + month + '/' + year;
     }
 
     render() {
         return (
-            <div className="jumbotron">
+            <div className="jumbotron" id={'todo' + this.props.todo.id}>
                 <h2>{this.props.todo.title}</h2>
                 <p>{this.props.todo.description}</p>
                 <hr/>
-                <p>{'Fecha: ' + this.props.todo.deadline}</p>
+                <p>{'Fecha: ' + this.createDate(this.props.todo.deadline)}</p>
                 { this.props.todo.done ? 
                     <a className="btn btn-secondary" role="button" disabled={true}>Completado</a>
                     :

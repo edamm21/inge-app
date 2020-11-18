@@ -8,7 +8,7 @@ const { pool } = require('../../postgreSQL');
     @access: público
  */
 router.get('/', (req, res) => {
-    const query = 'SELECT * FROM todos ORDER BY deadline ASC;';
+    const query = 'SELECT * FROM todos WHERE deadline > now() ORDER BY deadline ASC;';
     pool.query(query, (error, results) => {
         res.header('Access-Control-Allow-Origin', '*');
         res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
@@ -41,14 +41,22 @@ router.get('/:id', (req, res) => {
     @access: público
  */
 router.post('/', (req, res) => {
-    const query = 'INSERT INTO todos(title, description, deadline) VALUES($1, $2, $3);';
+    const query = 'INSERT INTO todos(title, description, deadline) VALUES($1, $2, $3) RETURNING id;';
     const values = [req.body.title, req.body.description, req.body.deadline];
+    console.log(values);
     pool.query(query, values, (error, results) => {
         res.header('Access-Control-Allow-Origin', '*');
         res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
         if(error)
             return res.status(400).json({ msg: 'Error creando TODO' });
-        return res.status(200).json({ msg: 'TODO añadido a la BD exitosamente!' });
+        const id = results.rows[0].id;
+        return res.status(200).json({ 
+            id: id,
+            title: req.body.title,
+            description: req.body.description,
+            deadline: req.body.deadline,
+            done: false,
+        });
     });
 });
 
@@ -58,25 +66,14 @@ router.post('/', (req, res) => {
     @access: público
  */
 router.delete('/:id', (req, res) => {
-    console.log('Deleting....');
-    const query = 'DELETE FROM todos WHERE id = $1 RETURNING;';
-    const getAll = 'SELECT * FROM todos SORT BY deadline ASC;';
+    const query = 'DELETE FROM todos WHERE id = $1;';
     const id = [req.params.id];
     pool.query(query, id, (error, results) => {
         res.header('Access-Control-Allow-Origin', '*');
         res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
         if(error)
             return res.status(400).json({ msg: 'Error eliminando todo' });
-        else if(results.rows.length === 0)
-            return res.status(400).json({ msg: 'El id no existe!' });
-        else {
-            //return res.status(200).json({ msg: 'Todo eliminado exitosamente!' });
-            pool.query(getAll, (error, results) => {
-                if(error)
-                    return res.status(400).json({ msg: 'Error' });
-                return res.status(200).json(results.rows);
-            });
-        }
+        return res.status(200).json({ msg: 'Todo eliminado con éxito' });
     });
 });
 
@@ -86,7 +83,6 @@ router.delete('/:id', (req, res) => {
     @access: público
  */
 router.put('/:id', (req, res) => {
-    console.log('Completing...');
     const query = 'UPDATE todos SET done = true WHERE id = $1 RETURNING *;';
     const id = [req.params.id];
     pool.query(query, id, (error, results) => {
@@ -94,7 +90,6 @@ router.put('/:id', (req, res) => {
         res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
         if(error)
             return res.status(400).json({ msg: 'Error completando TODO' });
-        console.log(results.rows[0]);
         return res.status(200).json(results.rows[0]);
     });
 });

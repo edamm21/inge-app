@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getTodos } from '../actions/todoActions';
 import TodoList from './TodoList';
+import NewTodo from './NewTodo';
 
 class Landing extends Component {
 
@@ -15,8 +16,13 @@ class Landing extends Component {
 
     render() {
         return (
-            <div>
-                <TodoList todos={this.todos}/>
+            <div class="row" style={{width: '80%', marginLeft: 'auto', marginRight: 'auto', textAlign: 'center'}}>
+                <div className="col-3" style={{border: '1px solid black', height: 'max-content', borderRadius: 5}}>
+                    <NewTodo/>
+                </div>
+                <div className="col-9">
+                    <TodoList todos={this.todos}/>
+                </div>
             </div>
         );
     }

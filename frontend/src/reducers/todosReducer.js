@@ -16,7 +16,6 @@ export default function(state = initialState, action) {
     switch(action.type) {
         case GET_TODO:
         case GET_TODOS:
-        case DELETE_TODO:
             return {
                 ...state,
                 todos: state.todos ? [...state.todos, ...action.payload] : action.payload,
@@ -46,7 +45,12 @@ export default function(state = initialState, action) {
                 ...state,
                 loading: true
             };
+        case DELETE_TODO:
+            return {
+                ...state,
+                loading: false
+            };
         default:
-            return state;
+            return state
     }
 }
