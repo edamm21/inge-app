@@ -1,0 +1,3 @@
+{
+    "postgresURI":"postgres://postgres:password@db:5432/inge"
+}

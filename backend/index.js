@@ -7,6 +7,8 @@ const app = express();
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
 app.use(bodyParser.json({limit: '50MB', extended: true}));
 
+app.use('/api/todos', require('./endpoints/api/todos'));
+
 app.get('/', (req, res) => {
     res.send('Hello');
 });

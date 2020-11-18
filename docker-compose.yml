@@ -18,9 +18,17 @@ services:
     restart: always
     links:
       - db  # Create database container
+    environment: 
+      SEQ_DB: inge
+      SEQ_USER: postgres
+      SEQ_PW: password
+      DATABASE_URL: postgres://postgres:password@db:5432/inge
   db:
     image: postgres:11.6-alpine
     ports:
     - "5432:5432"
     container_name: database-docker
     restart: always
+    environment: 
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password

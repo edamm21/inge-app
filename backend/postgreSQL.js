@@ -2,9 +2,14 @@ const { Pool } = require('pg');
 const config = require('config');
 const connectionString = config.get('postgresURI');
 
-const Pool = new Pool({
-    connectionString: connectionString,
-    ssl: true
-});
+const config_psql = {
+    user: 'postgres',
+    host: 'db',
+    database: 'inge',
+    password: 'password',
+    port: 5432,
+};
+
+const pool = new Pool(config_psql);
 
 module.exports = { pool }

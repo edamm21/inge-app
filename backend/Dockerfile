@@ -1,10 +1,10 @@
 # Base image
 FROM node
 # Make folder to put our files in
-RUN mkdir -p /usr/src/full-stack
-RUN mkdir -p /usr/src/full-stack/backend 
+RUN mkdir -p /usr/src/app
+RUN mkdir -p /usr/src/app/backend 
 # Set working directory so that all subsequent command runs in this folder
-WORKDIR /usr/src/full-stack/backend 
+WORKDIR /usr/src/app/backend 
 # Copy package json and install dependencies
 COPY package*.json ./
 RUN npm install 
