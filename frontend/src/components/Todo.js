@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { completeTodo, deleteTodo } from '../actions/todoActions';
 import { connect } from 'react-redux';
+import Axios from 'axios';
 
 class Todo extends Component {
 

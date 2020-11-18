@@ -59,7 +59,8 @@ router.post('/', (req, res) => {
  */
 router.delete('/:id', (req, res) => {
     console.log('Deleting....');
-    const query = 'DELETE FROM todos WHERE id = $1 RETURNING id;';
+    const query = 'DELETE FROM todos WHERE id = $1 RETURNING;';
+    const getAll = 'SELECT * FROM todos SORT BY deadline ASC;';
     const id = [req.params.id];
     pool.query(query, id, (error, results) => {
         res.header('Access-Control-Allow-Origin', '*');
@@ -68,9 +69,14 @@ router.delete('/:id', (req, res) => {
             return res.status(400).json({ msg: 'Error eliminando todo' });
         else if(results.rows.length === 0)
             return res.status(400).json({ msg: 'El id no existe!' });
-        else
-            return res.status(200).json({ msg: 'Todo eliminado exitosamente!' });
-
+        else {
+            //return res.status(200).json({ msg: 'Todo eliminado exitosamente!' });
+            pool.query(getAll, (error, results) => {
+                if(error)
+                    return res.status(400).json({ msg: 'Error' });
+                return res.status(200).json(results.rows);
+            });
+        }
     });
 });
 
