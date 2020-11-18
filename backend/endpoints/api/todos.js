@@ -8,7 +8,7 @@ const { pool } = require('../../postgreSQL');
     @access: público
  */
 router.get('/', (req, res) => {
-    const query = 'SELECT * FROM todos WHERE deadline > now() ORDER BY deadline ASC;';
+    const query = 'SELECT * FROM todos ORDER BY deadline ASC;';
     pool.query(query, (error, results) => {
         res.header('Access-Control-Allow-Origin', '*');
         res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
